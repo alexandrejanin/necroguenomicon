@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Unit : MonoBehaviour {
     public Environment environment;
 
-    [SerializeField]
-    private Vector2Int position;
+    [SerializeField] private Vector2Int position;
     public Vector2Int Position => position;
 
     public int maxHealth;
@@ -17,8 +15,7 @@ public class Unit : MonoBehaviour {
     public Dictionary<Element, int> resistances = new Dictionary<Element, int>();
     public Dictionary<Element, int> affinities = new Dictionary<Element, int>();
 
-    [SerializeField]
-    private List<Effect> effects = new List<Effect>();
+    [SerializeField] private List<Effect> effects = new List<Effect>();
     public List<Effect> Effects => effects;
 
     public void Spawn(Vector2Int position) {
@@ -41,8 +38,8 @@ public class Unit : MonoBehaviour {
 
     public Dictionary<Vector2Int, List<Vector2Int>> GetMovementTiles() {
         var tiles = new Dictionary<Vector2Int, List<Vector2Int>>();
-        for(var y = position.y - movementPoints; y <= position.y + movementPoints; y++ ){
-            for(var x = position.x - movementPoints; x <= position.x + movementPoints; x++ ){
+        for (var y = position.y - movementPoints; y <= position.y + movementPoints; y++) {
+            for (var x = position.x - movementPoints; x <= position.x + movementPoints; x++) {
                 var tile = new Vector2Int(x, y);
 
                 var unit = environment.GetUnit(tile);
@@ -68,20 +65,21 @@ public class Unit : MonoBehaviour {
         var tile = Position;
 
         do {
-            if(tile.x < goal.x)
+            if (tile.x < goal.x)
                 tile.x++;
-            else if(tile.x > goal.x)
+            else if (tile.x > goal.x)
                 tile.x--;
-            else if(tile.y < goal.y)
+            else if (tile.y < goal.y)
                 tile.y++;
-            else if(tile.y > goal.y)
+            else if (tile.y > goal.y)
                 tile.y--;
 
             path.Add(tile);
-        } while(tile != goal);
+        } while (tile != goal);
 
         return path;
     }
+
     public void Damage(Element element, int damage) {
         var mult = 100;
 

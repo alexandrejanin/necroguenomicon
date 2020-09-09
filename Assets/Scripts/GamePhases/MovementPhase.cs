@@ -1,23 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MovementPhase : GamePhase {
-    public override string Text(GameController controller) {
-        var movementTiles = controller.Player.GetMovementTiles();
-        var targetedTile = controller.GetTargetedTile();
-        if(movementTiles.ContainsKey(targetedTile))
-            return $"Phase de déplacement ({targetedTile.x}, {targetedTile.y}) {movementTiles[targetedTile].Count}PM";
-        
-        return $"Phase de déplacement ({targetedTile.x}, {targetedTile.y})";
-    }
+    public override string Text(GameController controller) => "Phase de deplacement";
 
     public override GamePhase Update(GameController controller) {
         var movementTiles = controller.Player.GetMovementTiles();
         var targetedTile = controller.GetTargetedTile();
 
+        controller.TileDrawer.DrawTiles(movementTiles.Keys.ToList());
+
         if (Input.GetMouseButtonDown(0)) {
             if (movementTiles.ContainsKey(targetedTile)) {
+                controller.TileDrawer.Clear();
+
                 controller.Player.Move(movementTiles[targetedTile]);
 
                 foreach (var unit in controller.Environment.units) {

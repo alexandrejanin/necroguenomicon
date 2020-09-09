@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Effect {
+﻿public class Effect {
     private string name;
     private System.Action<Unit> apply;
     private int turns;

@@ -1,15 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AttackPhase : GamePhase {
     private Spell spell = new Fireball();
 
-    public override string Text(GameController controller) {
-        var targetedTile = controller.GetTargetedTile();
-        
-        return $"Phase d'attaque : {spell.Name} ({targetedTile.x}, {targetedTile.y})";
-    }
+    public override string Text(GameController controller) => "Phase d'attaque";
 
     public override void Start(GameController controller) {
         foreach (var unit in controller.Environment.units) {
@@ -20,9 +14,15 @@ public class AttackPhase : GamePhase {
     public override GamePhase Update(GameController controller) {
         var targetedTile = controller.GetTargetedTile();
 
+        controller.TileDrawer.DrawTiles(spell.GetValidTargets(controller.Player));
+
         if (Input.GetMouseButtonDown(0)) {
-            var units = spell.Apply(controller.Player, targetedTile);
-            return new MovementPhase();
+            if (spell.GetValidTargets(controller.Player).Contains(targetedTile)) {
+                controller.TileDrawer.Clear();
+
+                spell.Apply(controller.Player, targetedTile);
+                return new MovementPhase();
+            }
         }
 
         return this;

@@ -1,36 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
-    [SerializeField, Min(0)]
-    private int enemyCount = 2;
+    [SerializeField, Min(0)] private int enemyCount = 2;
 
-    [SerializeField]
-    private Text text;
+    [SerializeField] private Text text;
 
-    [SerializeField]
-    private Unit playerPrefab;
+    [SerializeField] private Unit playerPrefab;
     private Unit player;
     public Unit Player => player;
-    
-    [SerializeField]
-    private Unit enemyPrefab;
 
-    [SerializeField]
-    private UnitHealthBar healthBarPrefab;
+    [SerializeField] private Unit enemyPrefab;
 
-    [SerializeField]
+    [SerializeField] private UnitHealthBar healthBarPrefab;
+
     private Environment environment = new Environment();
     public Environment Environment => environment;
 
     private GamePhase phase;
     public GamePhase Phase => phase;
 
+    private TileDrawer tileDrawer;
+    public TileDrawer TileDrawer => tileDrawer;
+
     private void Awake() {
+        tileDrawer = GetComponent<TileDrawer>();
+
         phase = new MovementPhase();
-        player = SpawnUnit(playerPrefab, new Vector2Int(0,0));
+        player = SpawnUnit(playerPrefab, new Vector2Int(0, 0));
         for (var i = 0; i < enemyCount; i++) {
             SpawnUnit(enemyPrefab, new Vector2Int(Random.Range(-5, 5), Random.Range(-5, 5)));
         }
@@ -42,6 +39,7 @@ public class GameController : MonoBehaviour {
             phase = newPhase;
             newPhase.Start(this);
         }
+
         text.text = phase?.Text(this);
     }
 
@@ -62,9 +60,5 @@ public class GameController : MonoBehaviour {
             Mathf.FloorToInt(mousePositionInWorld.x),
             Mathf.FloorToInt(mousePositionInWorld.y)
         );
-    }
-
-    public static int ManhattanDistance(Vector2Int a, Vector2Int b) {
-        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
     }
 }

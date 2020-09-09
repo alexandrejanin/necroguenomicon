@@ -1,15 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class UnitHealthBar : MonoBehaviour {
-    [SerializeField]
-    private Image image;
+    [SerializeField] private Image image;
 
     public Unit unit;
 
-    private void Update () {
+    private void Update() {
         if (!unit)
             Destroy(gameObject);
 
