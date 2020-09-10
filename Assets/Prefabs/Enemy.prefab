@@ -92,11 +92,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1299222155524231471}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 284ff40d7e812e246ae2e1add6bf6751, type: 3}
+  m_Script: {fileID: 11500000, guid: a54e3ff7f7b9f204c983fe1c1ae6580f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 0}
   maxHealth: 20
   health: 20
-  maxMovementPoints: 1
-  movementPoints: 1
+  maxMovementPoints: 2
+  movementPoints: 2

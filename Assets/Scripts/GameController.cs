@@ -10,11 +10,11 @@ public class GameController : MonoBehaviour {
 
     public Text PhaseText => phaseText;
 
-    [SerializeField] private Unit playerPrefab;
-    private Unit player;
-    public Unit Player => player;
+    [SerializeField] private Player playerPrefab;
+    private Player player;
+    public Player Player => player;
 
-    [SerializeField] private Unit enemyPrefab;
+    [SerializeField] private Enemy enemyPrefab;
 
     [SerializeField] private UnitHealthBar healthBarPrefab;
 
@@ -49,11 +49,7 @@ public class GameController : MonoBehaviour {
         Phase = new MovementPhase(this);
     }
 
-    private void Start() {
-        phaseCoroutine = StartCoroutine(Phase.Run());
-    }
-
-    private Unit SpawnUnit(Unit prefab, Vector2Int position) {
+    private T SpawnUnit<T>(T prefab, Vector2Int position) where T : Unit {
         var unit = Instantiate(prefab);
         unit.Spawn(position);
         environment.AddUnit(unit);

@@ -7,7 +7,7 @@ public class UnitHealthBar : MonoBehaviour {
     public Unit unit;
 
     private void Update() {
-        if (unit == null || !unit) {
+        if (unit == null || !unit || unit.health <= 0) {
             Destroy(gameObject);
             return;
         }
