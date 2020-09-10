@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Unit : MonoBehaviour {
     public Environment environment;
 
-    [SerializeField] private Vector2Int position;
+    private Vector2Int position;
     public Vector2Int Position => position;
 
     public int maxHealth;
@@ -22,18 +23,23 @@ public class Unit : MonoBehaviour {
         this.position = position;
     }
 
-    public void Update() {
-        transform.position = new Vector3(Position.x + 0.5f, Position.y + 0.5f);
+    public void FixedUpdate() {
+        var targetPosition = new Vector3(Position.x + 0.5f, Position.y + 0.5f);
+        transform.position = Vector3.Lerp(transform.position, targetPosition, 0.2f);
     }
 
     public void StartOfTurn() {
-        Effects.RemoveAll((effect) => effect.Apply(this));
+        Effects.RemoveAll(effect => effect.Apply(this));
     }
 
-    public void Move(List<Vector2Int> path) {
+    public IEnumerator Move(List<Vector2Int> path) {
         if (path == null || path.Count == 0)
-            return;
-        this.position = path[path.Count - 1];
+            yield break;
+
+        foreach (var tile in path) {
+            position = tile;
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 
     public Dictionary<Vector2Int, List<Vector2Int>> GetMovementTiles() {

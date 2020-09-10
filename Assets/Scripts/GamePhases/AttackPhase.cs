@@ -1,30 +1,40 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class AttackPhase : GamePhase {
     private Spell spell = new Fireball();
 
-    public override string Text(GameController controller) => "Phase d'attaque";
+    public AttackPhase(GameController controller) : base(controller) { }
 
-    public override void Start(GameController controller) {
+    public override IEnumerator Run() {
         foreach (var unit in controller.Environment.units) {
+            controller.PhaseText.text = "Phase d'attaque\nTour des ennemis";
+
             unit.StartOfTurn();
-        }
-    }
 
-    public override GamePhase Update(GameController controller) {
-        var targetedTile = controller.GetTargetedTile();
+            if (unit == controller.Player) {
+                controller.PhaseText.text = "Phase d'attaque\nVotre tour";
+                var validTargets = spell.GetValidTargets(controller.Player);
+                controller.TileDrawer.DrawTiles(validTargets);
 
-        controller.TileDrawer.DrawTiles(spell.GetValidTargets(controller.Player));
+                Vector2Int targetedTile;
+                do {
+                    targetedTile = controller.GetTargetedTile();
+                    yield return null;
+                } while (!Input.GetMouseButtonDown(0) || !validTargets.Contains(targetedTile));
 
-        if (Input.GetMouseButtonDown(0)) {
-            if (spell.GetValidTargets(controller.Player).Contains(targetedTile)) {
                 controller.TileDrawer.Clear();
 
                 spell.Apply(controller.Player, targetedTile);
-                return new MovementPhase();
             }
         }
 
-        return this;
+        foreach (var unit in controller.Environment.units)
+            if (unit.health <= 0)
+                Object.Destroy(unit);
+
+        controller.Environment.units.RemoveAll(u => u.health <= 0);
+
+        controller.Phase = new MovementPhase(controller);
     }
 }

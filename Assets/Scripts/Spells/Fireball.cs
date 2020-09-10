@@ -19,7 +19,7 @@ public class Fireball : Spell {
         target.Effects.Add(new Effect(
             2,
             "En feu !",
-            (stats) => stats.Damage(Element.Fire, 5)
+            stats => stats.Damage(Element.Fire, 5)
         ));
 
         secondary?.Apply(caster, position);

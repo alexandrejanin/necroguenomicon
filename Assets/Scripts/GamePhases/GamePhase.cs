@@ -1,7 +1,11 @@
-﻿public abstract class GamePhase {
-    public abstract string Text(GameController controller);
+﻿using System.Collections;
 
-    public virtual void Start(GameController controller) { }
+public abstract class GamePhase {
+    protected GameController controller;
 
-    public abstract GamePhase Update(GameController controller);
+    protected GamePhase(GameController controller) {
+        this.controller = controller;
+    }
+
+    public abstract IEnumerator Run();
 }

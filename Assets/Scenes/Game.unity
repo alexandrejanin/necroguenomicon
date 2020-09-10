@@ -1156,7 +1156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyCount: 8
-  text: {fileID: 953399565}
+  phaseText: {fileID: 953399565}
   playerPrefab: {fileID: 4220747923957170366, guid: 0694e10ccaf40214cad2f4ca3037e0e4, type: 3}
   enemyPrefab: {fileID: 4220747923957170366, guid: fb66279b137835e4da4f62c6a1a82458, type: 3}
   healthBarPrefab: {fileID: 3375559681909137357, guid: 536629e694b12c24a8bb8e12e08d0590, type: 3}
@@ -1207,8 +1207,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 218.43, y: -206.55997}
-  m_SizeDelta: {x: 600, y: 50}
+  m_AnchoredPosition: {x: 218.43, y: -219.41995}
+  m_SizeDelta: {x: 600, y: 97.95715}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &953399565
 MonoBehaviour:
@@ -1237,7 +1237,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 76
-    m_Alignment: 6
+    m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
