@@ -7,8 +7,10 @@ public class UnitHealthBar : MonoBehaviour {
     public Unit unit;
 
     private void Update() {
-        if (!unit)
+        if (unit == null || !unit) {
             Destroy(gameObject);
+            return;
+        }
 
         transform.position = Camera.main.WorldToScreenPoint(unit.transform.position + new Vector3(0, -0.25f));
         image.fillAmount = unit.health / (float) unit.maxHealth;

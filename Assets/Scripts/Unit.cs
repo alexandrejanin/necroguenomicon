@@ -8,6 +8,8 @@ public class Unit : MonoBehaviour {
     private Vector2Int position;
     public Vector2Int Position => position;
 
+    public Vector3 WorldPosition => new Vector3(Position.x + 0.5f, Position.y + 0.5f);
+
     public int maxHealth;
     public int health;
     public int maxMovementPoints;
@@ -24,8 +26,7 @@ public class Unit : MonoBehaviour {
     }
 
     public void FixedUpdate() {
-        var targetPosition = new Vector3(Position.x + 0.5f, Position.y + 0.5f);
-        transform.position = Vector3.Lerp(transform.position, targetPosition, 0.2f);
+        transform.position = Vector3.Lerp(transform.position, WorldPosition, 0.2f);
     }
 
     public void StartOfTurn() {
@@ -38,7 +39,9 @@ public class Unit : MonoBehaviour {
 
         foreach (var tile in path) {
             position = tile;
-            yield return new WaitForSeconds(0.5f);
+            while (Vector3.Distance(transform.position, WorldPosition) > 0.01f) {
+                yield return null;
+            }
         }
     }
 
