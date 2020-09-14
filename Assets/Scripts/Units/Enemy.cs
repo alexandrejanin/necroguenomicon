@@ -24,9 +24,9 @@ public class Enemy : Unit {
     }
 
     public override IEnumerator PlayAttackPhase(GameController controller) {
-        if (Util.ManhattanDistance(Position, controller.Player.Position) <= 1) {
-            controller.Player.Damage(Element.Physical, 10);
-        }
+        if (Util.ManhattanDistance(Position, controller.Player.Position) <= 1)
+            controller.Player.Damage(10, Element.Physical, this, "Coup de poing");
+        
         yield break;
     }
 

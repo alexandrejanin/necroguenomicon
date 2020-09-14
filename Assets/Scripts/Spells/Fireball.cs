@@ -1,29 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Fireball : Spell {
-    public override string Name => "Boule de feu";
+    protected override string OwnName => "Boule de Feu";
+    protected override Element Element => Element.Fire;
 
-    public override List<Vector2Int> GetValidTargets(Unit caster) {
-        return caster.environment.ManhattanRange(caster.Position, 4);
+    public override HashSet<Vector2Int> GetValidTargets(Unit caster) {
+        return caster.environment.ManhattanRange(caster.Position, 5);
     }
 
-    public override List<Unit> Apply(Unit caster, Vector2Int position) {
+    public override HashSet<Unit> PrimaryEffect(Unit caster, Vector2Int position) {
         var target = caster.environment.GetUnit(position);
-        if (target == null) return null;
+        if (target == null)
+            return null;
 
-        var list = new List<Unit> {target};
+        Damage(target, 10, caster);
 
-        target.Damage(Element.Fire, 10);
+        var targets = new HashSet<Unit>{target};
 
-        target.Effects.Add(new Effect(
-            2,
-            "En feu !",
-            stats => stats.Damage(Element.Fire, 5)
-        ));
+        SecondaryEffect(caster, targets);
 
-        secondary?.Apply(caster, position);
+        return targets;
+    }
 
-        return list;
+    public override HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> targets) {
+        foreach (var target in targets)
+            target.AddTickerEffect(new TickerEffect(
+                "En feu !",
+                2,
+                onTick: unit => Damage(unit, 2, caster, "En feu !")
+            ));
+
+        return targets;
     }
 }

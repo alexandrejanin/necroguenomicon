@@ -42,11 +42,13 @@ public class GameController : MonoBehaviour {
         tileDrawer = GetComponent<TileDrawer>();
 
         player = SpawnUnit(playerPrefab, new Vector2Int(0, 0));
+        player.name = "Joueur";
         for (var i = 0; i < enemyCount; i++) {
-            SpawnUnit(enemyPrefab, new Vector2Int(Random.Range(-5, 5), Random.Range(-5, 5)));
+            var unit = SpawnUnit(enemyPrefab, new Vector2Int(Random.Range(-5, 5), Random.Range(-5, 5)));
+            unit.name = $"Ivrogne Cogneur {i}";
         }
 
-        Phase = new MovementPhase(this);
+        Phase = new PreparationPhase(this);
     }
 
     private T SpawnUnit<T>(T prefab, Vector2Int position) where T : Unit {

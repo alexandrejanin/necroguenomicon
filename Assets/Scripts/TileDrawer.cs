@@ -12,7 +12,7 @@ public class TileDrawer : MonoBehaviour {
         tileObjects.Clear();
     }
 
-    public void DrawTiles(List<Vector2Int> tiles) {
+    public void DrawTiles(ICollection<Vector2Int> tiles) {
         if (tiles == null || tiles.Count == 0) {
             Clear();
             return;
