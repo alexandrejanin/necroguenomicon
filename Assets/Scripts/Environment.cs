@@ -19,8 +19,8 @@ public class Environment {
         return null;
     }
 
-    public List<Vector2Int> ManhattanRange(Vector2Int center, int range) {
-        var tiles = new List<Vector2Int>();
+    public HashSet<Vector2Int> ManhattanRange(Vector2Int center, int range) {
+        var tiles = new HashSet<Vector2Int>();
         for (var y = center.y - range; y <= center.y + range; y++) {
             for (var x = center.x - range; x <= center.x + range; x++) {
                 var tile = new Vector2Int(x, y);

@@ -95,7 +95,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a54e3ff7f7b9f204c983fe1c1ae6580f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 20
-  health: 20
-  maxMovementPoints: 2
+  maxHealth: 25
+  health: 25
   movementPoints: 2

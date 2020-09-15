@@ -10,16 +10,24 @@ public abstract class Unit : MonoBehaviour {
 
     public Vector3 WorldPosition => new Vector3(Position.x + 0.5f, Position.y + 0.5f);
 
-    public int maxHealth;
-    public int health;
-    public int maxMovementPoints;
-    public int movementPoints;
+    [SerializeField]
+    protected int maxHealth;
+    public int MaxHealth => maxHealth;
 
-    public Dictionary<Element, int> resistances = new Dictionary<Element, int>();
-    public Dictionary<Element, int> affinities = new Dictionary<Element, int>();
+    [SerializeField]
+    protected int health;
+    public int Health => health;
+    
+    [SerializeField]
+    protected int movementPoints;
 
-    [SerializeField] private List<Effect> effects = new List<Effect>();
-    public List<Effect> Effects => effects;
+    [SerializeField]
+    protected ElementMap resistances = new ElementMap();
+   
+    [SerializeField]
+    protected ElementMap affinities = new ElementMap();
+
+    private List<TickerEffect> tickerEffects = new List<TickerEffect>();
 
     public void Spawn(Vector2Int position) {
         this.position = position;
@@ -30,7 +38,7 @@ public abstract class Unit : MonoBehaviour {
     }
 
     public void StartOfTurn() {
-        Effects.RemoveAll(effect => effect.Apply(this));
+        tickerEffects.RemoveAll(effect => effect.Tick(this));
     }
 
     public IEnumerator Move(List<Vector2Int> path) {
@@ -89,21 +97,26 @@ public abstract class Unit : MonoBehaviour {
         return path;
     }
 
-    public void Damage(Element element, int damage) {
-        var mult = 100;
+    public void Damage(int damage, Element element, Unit source, string name) {
+        var multiplier = 1f;
 
-        if (resistances != null && resistances.ContainsKey(element))
-            mult -= resistances[element];
+        multiplier -= resistances[element] / 100f;
 
-        damage = Mathf.RoundToInt(damage * mult / 100f);
+        multiplier += source.affinities[element] / 100f;
+
+        damage = Mathf.RoundToInt(damage * multiplier);
 
         health -= damage;
 
-        Debug.Log($"{name} subit {damage} points de dégats");
+        Debug.Log($"{source.name} inflige {damage} points de dégats de {element} à {this.name} avec {name}");
 
         if (health <= 0)
             Destroy(gameObject);
 
+    }
+
+    public void AddTickerEffect(TickerEffect effect) {
+        tickerEffects.Add(effect);
     }
 
     public abstract IEnumerator PlayMovementPhase(GameController controller);
