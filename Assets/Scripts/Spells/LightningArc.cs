@@ -2,11 +2,8 @@
 using System.Linq;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Lightning Arc", menuName = "Spell/Lightning Arc")]
 public class LightningArc : Spell {
-
-    protected override string OwnName => "Arc Électrique";
-    protected override Element Element => Element.Lightning;
-
     public override HashSet<Vector2Int> GetValidTargets(Unit caster) {
         return caster.environment.ManhattanRange(caster.Position, 4);
     }

@@ -2,14 +2,19 @@
 using UnityEngine;
 
 public class PreparationPhase : GamePhase {
-    public PreparationPhase(GameController controller) : base(controller) { }
+    private BookUI book;
+
+    public PreparationPhase(GameController controller) : base(controller) {
+        book = GameController.FindObjectOfType<BookUI>();
+     }
 
     public override IEnumerator Run() {
         controller.PhaseText.text = "Phase de préparation";
 
         controller.Player.Spells.Clear();
-        controller.Player.Spells.Add(new Fireball() {secondary = new LightningArc()});
-        controller.Player.Spells.Add(new LightningArc() {secondary = new Fireball()});
+
+        book.gameObject.SetActive(true);
+        book.StartTurn();
 
         yield return new WaitForSeconds(2f);
 

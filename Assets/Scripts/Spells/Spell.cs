@@ -4,13 +4,29 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public abstract class Spell {
-    public Spell secondary;
-    protected abstract string OwnName { get; }
-    protected abstract Element Element { get; }
+public abstract class Spell : ScriptableObject {
+    private Spell secondary;
+    public Spell Secondary => secondary;
 
-    public string Name => secondary == null ? OwnName : $"{OwnName} + {secondary.OwnName}"; 
+    [SerializeField]
+    private string ownName;
+    public string Name => secondary == null ? ownName : $"{ownName} + {secondary.ownName}"; 
+    
+    [SerializeField]
+    private Element element;
+    public Element Element => element;
 
+    [SerializeField]
+    private Color color;
+    public Color Color => color;
+
+    [SerializeField, Min(0)]
+    private int range;
+    public int Range => range;
+
+    [SerializeField]
+    private Sprite sprite;
+    public Sprite Sprite => sprite;
 
     public abstract HashSet<Vector2Int> GetValidTargets(Unit caster);
 
@@ -31,6 +47,14 @@ public abstract class Spell {
     }
 
     protected void Damage(Unit target, int damage, Unit caster, string name = null) {
-        target.Damage(damage, Element, caster, name ?? OwnName);
+        target.Damage(damage, element, caster, name ?? ownName);
+    }
+
+    public Spell WithSecondary(Spell spell) {
+        if (spell == null)
+            return this;
+        var newSpell = Instantiate(this);
+        newSpell.secondary = spell;
+        return newSpell;
     }
 }

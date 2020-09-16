@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Fireball", menuName = "Spell/Fireball")]
 public class Fireball : Spell {
-    protected override string OwnName => "Boule de Feu";
-    protected override Element Element => Element.Fire;
-
     public override HashSet<Vector2Int> GetValidTargets(Unit caster) {
         return caster.environment.ManhattanRange(caster.Position, 5);
     }
