@@ -95,6 +95,127 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a54e3ff7f7b9f204c983fe1c1ae6580f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 25
-  health: 25
-  movementPoints: 2
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: Stats
+      Entry: 7
+      Data: 0|UnitStats, Assembly-CSharp
+    - Name: maxHealth
+      Entry: 3
+      Data: 25
+    - Name: health
+      Entry: 3
+      Data: 25
+    - Name: movementPoints
+      Entry: 3
+      Data: 2
+    - Name: resistances
+      Entry: 7
+      Data: 1|System.Collections.Generic.Dictionary`2[[Element, Assembly-CSharp],[System.Int32,
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 2|System.Collections.Generic.EnumEqualityComparer`1[[Element, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 3
+      Data: 20
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: affinities
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: environment
+      Entry: 6
+      Data: 
+    - Name: baseStats
+      Entry: 7
+      Data: 3|UnitStats, Assembly-CSharp
+    - Name: maxHealth
+      Entry: 3
+      Data: 25
+    - Name: health
+      Entry: 3
+      Data: 25
+    - Name: movementPoints
+      Entry: 3
+      Data: 2
+    - Name: resistances
+      Entry: 7
+      Data: 4|System.Collections.Generic.Dictionary`2[[Element, Assembly-CSharp],[System.Int32,
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 5|System.Collections.Generic.EnumEqualityComparer`1[[Element, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 3
+      Data: 20
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: affinities
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 

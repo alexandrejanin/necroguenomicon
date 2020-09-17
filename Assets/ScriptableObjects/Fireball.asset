@@ -12,9 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 162937b83b87ad645a38e1d0dcbab717, type: 3}
   m_Name: Fireball
   m_EditorClassIdentifier: 
-  secondary: {fileID: 0}
   ownName: Boule de feu
   element: 1
   color: {r: 0.8018868, g: 0.1021271, b: 0.1021271, a: 1}
   range: 5
   sprite: {fileID: -2917000182891882972, guid: 97911faf57c2f394b95349d8463854ec, type: 3}
+  primaryDamage:
+    baseAmount: 10
+    bonusAmount: 3
+  secondaryDamage:
+    baseAmount: 2
+    bonusAmount: 2
+  secondaryDuration:
+    baseAmount: 2
+    bonusAmount: 0

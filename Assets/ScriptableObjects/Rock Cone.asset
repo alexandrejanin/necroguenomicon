@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 308dd3440d3b74146930afda0afa9170, type: 3}
+  m_Name: Rock Cone
+  m_EditorClassIdentifier: 
+  element: 4
+  color: {r: 0.5188679, g: 0.3699934, b: 0.3010413, a: 1}
+  range: 3
+  sprite: {fileID: 0}
+  primaryDamage:
+    baseAmount: 8
+    bonusAmount: 2
+  secondaryKnockback:
+    baseAmount: 2
+    bonusAmount: 0
+  secondaryDamage:
+    baseAmount: 10
+    bonusAmount: 3

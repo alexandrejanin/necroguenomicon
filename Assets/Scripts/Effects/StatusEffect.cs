@@ -1,9 +1,9 @@
-﻿public class StatusEffect : Effect{
-    public Element element;
-    public int value;
+﻿using System;
 
-    public StatusEffect(string name, int turns, Element element, int value) : base(name, turns) {
-        this.element = element;
-        this.value = value;
+public class StatsEffect : Effect{
+    public readonly System.Action<UnitStats> apply;
+
+    public StatsEffect(string name, int turns, Action<UnitStats> apply) : base(name, turns) {
+        this.apply = apply;
     }
 }

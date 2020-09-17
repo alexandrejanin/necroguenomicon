@@ -8,13 +8,13 @@ public class UnitHealthBar : MonoBehaviour {
     public Unit unit;
 
     private void Update() {
-        if (unit == null || !unit || unit.Health <= 0) {
+        if (unit == null || !unit || unit.Stats.health <= 0) {
             Destroy(gameObject);
             return;
         }
 
         transform.position = Camera.main.WorldToScreenPoint(unit.transform.position + new Vector3(0, 0.5f));
-        image.fillAmount = unit.Health / (float) unit.MaxHealth;
-        text.text = $"{unit.Health}/{unit.MaxHealth}";
+        image.fillAmount = unit.Stats.health / (float) unit.Stats.maxHealth;
+        text.text = $"{unit.Stats.health}/{unit.Stats.maxHealth}";
     }
 }

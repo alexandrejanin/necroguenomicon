@@ -12,9 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 734b692d72494b94ea4f277cb07d49c1, type: 3}
   m_Name: Lightning Arc
   m_EditorClassIdentifier: 
-  secondary: {fileID: 0}
   ownName: "Arc \xE9lectrique"
   element: 3
   color: {r: 0.8584906, g: 0.7561692, b: 0.11743506, a: 1}
   range: 4
   sprite: {fileID: 21300000, guid: 3a71239f09b8cdc41b9c45109f4e3220, type: 3}
+  primaryDamage:
+    baseAmount: 7
+    bonusAmount: 3
+  secondaryDamage:
+    baseAmount: 2
+    bonusAmount: 3

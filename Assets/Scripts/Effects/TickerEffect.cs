@@ -5,7 +5,7 @@ public class TickerEffect : Effect {
         this.onTick = onTick;
     }
 
-    public bool Tick(Unit unit) {
+    public override bool Tick(Unit unit) {
         onTick(unit);
         turns--;
         return turns <= 0;

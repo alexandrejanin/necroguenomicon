@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 
-public abstract class Unit : MonoBehaviour {
+public abstract class Unit : SerializedMonoBehaviour {
+    [HideInInspector]
     public Environment environment;
 
     private Vector2Int position;
@@ -10,27 +13,32 @@ public abstract class Unit : MonoBehaviour {
 
     public Vector3 WorldPosition => new Vector3(Position.x + 0.5f, Position.y + 0.5f);
 
-    [SerializeField]
-    protected int maxHealth;
-    public int MaxHealth => maxHealth;
+    [OdinSerialize]
+    protected UnitStats baseStats;
 
-    [SerializeField]
-    protected int health;
-    public int Health => health;
-    
-    [SerializeField]
-    protected int movementPoints;
-
-    [SerializeField]
-    protected ElementMap resistances = new ElementMap();
-   
-    [SerializeField]
-    protected ElementMap affinities = new ElementMap();
+    protected Dictionary<Element, int> resistances, affinities;
 
     private List<TickerEffect> tickerEffects = new List<TickerEffect>();
+    private List<StatsEffect> statsEffects = new List<StatsEffect>();
+
+    [OdinSerialize, ReadOnly]
+    public UnitStats Stats {
+        get {
+            var modifiedStats = new UnitStats(baseStats);
+
+            foreach (var statsEffect in statsEffects)
+                statsEffect.apply(modifiedStats);
+
+            return modifiedStats;
+        }
+        set {
+        }
+    }
 
     public void Spawn(Vector2Int position) {
         this.position = position;
+        this.baseStats.resistances = resistances;
+        this.baseStats.affinities = affinities;
     }
 
     public void FixedUpdate() {
@@ -39,6 +47,10 @@ public abstract class Unit : MonoBehaviour {
 
     public void StartOfTurn() {
         tickerEffects.RemoveAll(effect => effect.Tick(this));
+    }
+
+    public void EndOfTurn() {
+        statsEffects.RemoveAll(effect => effect.Tick(this));
     }
 
     public IEnumerator Move(List<Vector2Int> path) {
@@ -55,8 +67,8 @@ public abstract class Unit : MonoBehaviour {
 
     public Dictionary<Vector2Int, List<Vector2Int>> GetMovementTiles() {
         var tiles = new Dictionary<Vector2Int, List<Vector2Int>>();
-        for (var y = position.y - movementPoints; y <= position.y + movementPoints; y++) {
-            for (var x = position.x - movementPoints; x <= position.x + movementPoints; x++) {
+        for (var y = position.y - Stats.movementPoints; y <= position.y + Stats.movementPoints; y++) {
+            for (var x = position.x - Stats.movementPoints; x <= position.x + Stats.movementPoints; x++) {
                 var tile = new Vector2Int(x, y);
 
                 var unit = environment.GetUnit(tile);
@@ -65,7 +77,7 @@ public abstract class Unit : MonoBehaviour {
                     continue;
 
                 var path = GetPath(tile);
-                if (path.Count <= movementPoints)
+                if (path.Count <= Stats.movementPoints)
                     tiles.Add(tile, path);
             }
         }
@@ -100,23 +112,32 @@ public abstract class Unit : MonoBehaviour {
     public void Damage(int damage, Element element, Unit source, string name) {
         var multiplier = 1f;
 
-        multiplier -= resistances[element] / 100f;
+        multiplier -= Stats.GetResistance(element) / 100f;
 
-        multiplier += source.affinities[element] / 100f;
+        multiplier += source.Stats.GetAffinity(element) / 100f;
 
         damage = Mathf.RoundToInt(damage * multiplier);
 
-        health -= damage;
+        baseStats.health -= damage;
 
         Debug.Log($"{source.name} inflige {damage} points de dégats de {element} à {this.name} avec {name}");
 
-        if (health <= 0)
+        if (baseStats.health <= 0)
             Destroy(gameObject);
+    }
 
+    public void KnockBack(Vector2Int from, int distance) {
+        var dir = this.Position - from;
+        var dest = distance * new Vector2(dir.x, dir.y).normalized;
+        position = new Vector2Int(Mathf.RoundToInt(dest.x), Mathf.RoundToInt(dest.y));
     }
 
     public void AddTickerEffect(TickerEffect effect) {
         tickerEffects.Add(effect);
+    }
+
+    public void AddStatsEffect(StatsEffect effect) {
+        statsEffects.Add(effect);
     }
 
     public abstract IEnumerator PlayMovementPhase(GameController controller);

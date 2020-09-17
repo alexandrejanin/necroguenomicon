@@ -4,11 +4,14 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "Lightning Arc", menuName = "Spell/Lightning Arc")]
 public class LightningArc : Spell {
+    [SerializeField]
+    private SpellStat primaryDamage, secondaryDamage;
+
     public override HashSet<Vector2Int> GetValidTargets(Unit caster) {
-        return caster.environment.ManhattanRange(caster.Position, 4);
+        return caster.environment.ManhattanRange(caster.Position, Range);
     }
 
-    public override HashSet<Unit> PrimaryEffect(Unit caster, Vector2Int position) {
+    public override HashSet<Unit> PrimaryEffect(Unit caster, Vector2Int position, bool isPrimarySpell) {
         var target = caster.environment.GetUnit(position);
         if (target == null)
             return null;
@@ -16,12 +19,12 @@ public class LightningArc : Spell {
         var targets = GetLightningTargets(target, 2, 3, null);
 
         foreach (var lightningTarget in targets)
-            Damage(lightningTarget, 7, caster);
+            Damage(lightningTarget, primaryDamage.GetAmount(isPrimarySpell), caster);
 
         return targets;
     }
 
-    public override HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> primaryTargets) {
+    public override HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> primaryTargets, bool isSecondarySpell) {
         var secondaryTargets = new HashSet<Unit>();
         
         foreach (var primaryTarget in primaryTargets) {
@@ -30,7 +33,7 @@ public class LightningArc : Spell {
         }
 
         foreach (var secondaryTarget in secondaryTargets)
-            Damage(secondaryTarget, 2, caster);
+            Damage(secondaryTarget, secondaryDamage.GetAmount(isSecondarySpell), caster);
 
         return secondaryTargets;
     }

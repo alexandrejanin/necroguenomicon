@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -8,9 +7,7 @@ public abstract class Spell : ScriptableObject {
     private Spell secondary;
     public Spell Secondary => secondary;
 
-    [SerializeField] private string ownName;
-    public string OwnName => ownName;
-    public string FullName => secondary == null ? ownName : $"{ownName} + {secondary.ownName}";
+    public string FullName => secondary == null ? name : $"{name} + {secondary.name}";
 
     [SerializeField] private Element element;
     public Element Element => element;
@@ -26,24 +23,25 @@ public abstract class Spell : ScriptableObject {
 
     public abstract HashSet<Vector2Int> GetValidTargets(Unit caster);
 
-    public abstract HashSet<Unit> PrimaryEffect(Unit caster, Vector2Int position);
-    public abstract HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> primaryTargets);
+    public abstract HashSet<Unit> PrimaryEffect(Unit caster, Vector2Int position, bool isPrimarySpell);
+    public abstract HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> primaryTargets, bool isSecondarySpell);
 
     public virtual void Apply(Unit caster, Vector2Int position) {
         if (secondary == null) {
-            PrimaryEffect(caster, position);
+            var targets = PrimaryEffect(caster, position, false);
+            SecondaryEffect(caster, targets, false);
             return;
         }
 
-        var primaryTargets = PrimaryEffect(caster, position);
+        var primaryTargets = PrimaryEffect(caster, position, true);
         if (primaryTargets == null || primaryTargets.Count == 0)
             return;
-        var secondaryTargets = secondary.SecondaryEffect(caster, primaryTargets);
-        SecondaryEffect(caster, new HashSet<Unit>(secondaryTargets.Except(primaryTargets)));
+        var secondaryTargets = secondary.SecondaryEffect(caster, primaryTargets, true);
+        SecondaryEffect(caster, secondaryTargets, false);
     }
 
     protected void Damage(Unit target, int damage, Unit caster, string name = null) {
-        target.Damage(damage, element, caster, name ?? ownName);
+        target.Damage(damage, element, caster, name ?? this.name);
     }
 
     public Spell WithSecondary(Spell spell) {

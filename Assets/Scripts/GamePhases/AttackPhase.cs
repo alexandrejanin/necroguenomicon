@@ -8,22 +8,24 @@ public class AttackPhase : GamePhase {
         controller.PhaseText.text = "Phase d'attaque";
 
         foreach (var unit in controller.Environment.units) {
-            if (unit.Health <= 0)
+            if (unit.Stats.health <= 0)
                 continue;
 
             unit.StartOfTurn();
             
-            if (unit.Health <= 0)
+            if (unit.Stats.health <= 0)
                 continue;
             
             yield return unit.StartCoroutine(unit.PlayAttackPhase(controller));
+
+            unit.EndOfTurn();
         }
 
         foreach (var unit in controller.Environment.units)
-            if (unit.Health <= 0)
+            if (unit.Stats.health <= 0)
                 Object.Destroy(unit);
 
-        controller.Environment.units.RemoveAll(u => u.Health <= 0);
+        controller.Environment.units.RemoveAll(u => u.Stats.health <= 0);
 
         controller.Phase = new PreparationPhase(controller);
     }
