@@ -4,8 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "Lightning Arc", menuName = "Spell/Lightning Arc")]
 public class LightningArc : Spell {
-    [SerializeField]
-    private SpellStat primaryDamage, secondaryDamage;
+    [SerializeField] private SpellStat primaryDamage, secondaryDamage;
 
     public override HashSet<Vector2Int> GetValidTargets(Unit caster) {
         return caster.environment.ManhattanRange(caster.Position, Range);
@@ -26,9 +25,10 @@ public class LightningArc : Spell {
 
     public override HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> primaryTargets, bool isSecondarySpell) {
         var secondaryTargets = new HashSet<Unit>();
-        
+
         foreach (var primaryTarget in primaryTargets) {
-            var lightningTargets = GetLightningTargets(primaryTarget, 2, 3, new HashSet<Unit>(primaryTargets.Union(secondaryTargets)));
+            var lightningTargets = GetLightningTargets(primaryTarget, 2, 3,
+                new HashSet<Unit>(primaryTargets.Union(secondaryTargets)));
             secondaryTargets.UnionWith(lightningTargets);
         }
 
@@ -38,8 +38,10 @@ public class LightningArc : Spell {
         return secondaryTargets;
     }
 
-    private HashSet<Unit> GetLightningTargets(Unit primaryTarget, int maxRange, int maxTargets, HashSet<Unit> excluded) {
-        var currentTargets = new HashSet<Unit>{primaryTarget};
+    private HashSet<Unit> GetLightningTargets(
+        Unit primaryTarget, int maxRange, int maxTargets, HashSet<Unit> excluded
+    ) {
+        var currentTargets = new HashSet<Unit> {primaryTarget};
 
         var newTargets = new HashSet<Unit>();
         do {
@@ -55,8 +57,9 @@ public class LightningArc : Spell {
                         newTargets.Add(unit);
                 }
             }
+
             currentTargets.UnionWith(newTargets);
-        } while(newTargets.Count > 0);
+        } while (newTargets.Count > 0);
 
         return currentTargets;
     }

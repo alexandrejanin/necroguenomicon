@@ -16,12 +16,12 @@ public class UnitStats {
     public void AddAffinity(Element e, int r) => affinities[e] = GetAffinity(e) + r;
 
     public UnitStats(UnitStats stats) {
-        this.maxHealth = stats.maxHealth;
-        this.health = stats.health;
-        this.movementPoints = stats.movementPoints;
+        maxHealth = stats.maxHealth;
+        health = stats.health;
+        movementPoints = stats.movementPoints;
         if (stats.resistances != null)
-            this.resistances = new Dictionary<Element, int>(stats.resistances);
+            resistances = new Dictionary<Element, int>(stats.resistances);
         if (stats.affinities != null)
-            this.affinities = new Dictionary<Element, int>(stats.affinities);
+            affinities = new Dictionary<Element, int>(stats.affinities);
     }
 }

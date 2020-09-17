@@ -2,16 +2,14 @@
 using UnityEngine.UI;
 
 public class SpellCard : MonoBehaviour {
-    [SerializeField]
-    private SpellCard secondaryCard;
+    [SerializeField] private SpellCard secondaryCard;
 
-    [SerializeField]
-    private Image background, sprite;
+    [SerializeField] private Image background, sprite;
 
-    [SerializeField]
-    private Text titleText, primaryText, secondaryText, rangeText;
+    [SerializeField] private Text titleText, primaryText, secondaryText, rangeText;
 
     private Spell spell;
+
     public Spell Spell {
         get => spell;
         set {
@@ -27,6 +25,7 @@ public class SpellCard : MonoBehaviour {
         rangeText.text = spell.Range.ToString();
         background.color = spell.Color;
         sprite.sprite = spell.Sprite;
+        sprite.gameObject.SetActive(spell.Sprite != null);
 
         if (secondaryCard != null)
             secondaryCard.Spell = spell.Secondary;

@@ -3,8 +3,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "Fireball", menuName = "Spell/Fireball")]
 public class Fireball : Spell {
-    [SerializeField]
-    private SpellStat primaryDamage, secondaryDamage, secondaryDuration;
+    [SerializeField] private SpellStat primaryDamage, secondaryDamage, secondaryDuration;
 
     public override HashSet<Vector2Int> GetValidTargets(Unit caster) {
         return caster.environment.ManhattanRange(caster.Position, Range);
@@ -17,7 +16,7 @@ public class Fireball : Spell {
 
         Damage(target, primaryDamage.GetAmount(isPrimarySpell), caster);
 
-        return new HashSet<Unit>{target};
+        return new HashSet<Unit> {target};
     }
 
     public override HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell) {

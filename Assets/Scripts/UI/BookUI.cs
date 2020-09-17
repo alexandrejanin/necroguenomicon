@@ -48,7 +48,9 @@ public class BookUI : MonoBehaviour {
     }
 
     private void CombineSpells() =>
-        resultSpellSlot.Spell = primarySpellSlot.Spell?.WithSecondary(secondarySpellSlot.Spell);
+        resultSpellSlot.Spell = primarySpellSlot.Spell
+            ? primarySpellSlot.Spell.WithSecondary(secondarySpellSlot.Spell)
+            : null;
 
     public void OnCombinationSlotClicked(SpellSlot spellSlot) {
         foreach (var fragmentSlot in spellFragmentSlots) {

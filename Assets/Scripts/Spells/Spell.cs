@@ -40,8 +40,8 @@ public abstract class Spell : ScriptableObject {
         SecondaryEffect(caster, secondaryTargets, false);
     }
 
-    protected void Damage(Unit target, int damage, Unit caster, string name = null) {
-        target.Damage(damage, element, caster, name ?? this.name);
+    protected void Damage(Unit target, int damage, Unit caster, string sourceName = null) {
+        target.Damage(damage, element, caster, sourceName ?? name);
     }
 
     public Spell WithSecondary(Spell spell) {

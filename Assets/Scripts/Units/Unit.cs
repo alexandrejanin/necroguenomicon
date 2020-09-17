@@ -5,16 +5,14 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 
 public abstract class Unit : SerializedMonoBehaviour {
-    [HideInInspector]
-    public Environment environment;
+    [HideInInspector] public Environment environment;
 
     private Vector2Int position;
     public Vector2Int Position => position;
 
     public Vector3 WorldPosition => new Vector3(Position.x + 0.5f, Position.y + 0.5f);
 
-    [OdinSerialize]
-    protected UnitStats baseStats;
+    [OdinSerialize] protected UnitStats baseStats;
 
     protected Dictionary<Element, int> resistances, affinities;
 
@@ -31,14 +29,13 @@ public abstract class Unit : SerializedMonoBehaviour {
 
             return modifiedStats;
         }
-        set {
-        }
+        set => baseStats = value;
     }
 
-    public void Spawn(Vector2Int position) {
-        this.position = position;
-        this.baseStats.resistances = resistances;
-        this.baseStats.affinities = affinities;
+    public void Spawn(Vector2Int spawnPosition) {
+        position = spawnPosition;
+        baseStats.resistances = resistances;
+        baseStats.affinities = affinities;
     }
 
     public void FixedUpdate() {
@@ -109,7 +106,7 @@ public abstract class Unit : SerializedMonoBehaviour {
         return path;
     }
 
-    public void Damage(int damage, Element element, Unit source, string name) {
+    public void Damage(int damage, Element element, Unit source, string spellName) {
         var multiplier = 1f;
 
         multiplier -= Stats.GetResistance(element) / 100f;
@@ -120,16 +117,32 @@ public abstract class Unit : SerializedMonoBehaviour {
 
         baseStats.health -= damage;
 
-        Debug.Log($"{source.name} inflige {damage} points de dégats de {element} à {this.name} avec {name}");
+        Debug.Log($"{source.name} inflige {damage} points de dégats de {element} à {name} avec {spellName}");
 
         if (baseStats.health <= 0)
             Destroy(gameObject);
     }
 
-    public void KnockBack(Vector2Int from, int distance) {
-        var dir = this.Position - from;
+    public HashSet<Unit> KnockBack(Vector2Int from, int distance) {
+        if (from == Position)
+            return null;
+
+        var dir = Position - from;
         var dest = distance * new Vector2(dir.x, dir.y).normalized;
-        position = new Vector2Int(Mathf.RoundToInt(dest.x), Mathf.RoundToInt(dest.y));
+        var targetPosition = new Vector2Int(Mathf.RoundToInt(dest.x), Mathf.RoundToInt(dest.y));
+        var unit = environment.GetUnit(targetPosition);
+
+        if (unit == null) {
+            position = targetPosition;
+            return new HashSet<Unit> {this};
+        }
+
+        var units = unit.KnockBack(position, 1);
+        units.Add(this);
+
+        position = targetPosition;
+
+        return units;
     }
 
     public void AddTickerEffect(TickerEffect effect) {

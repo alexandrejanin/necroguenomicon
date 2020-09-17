@@ -13,7 +13,7 @@ public class Enemy : Unit {
         List<Vector2Int> minPath = null;
 
         foreach (var kvp in tiles) {
-            var dist = Util.ManhattanDistance(kvp.Key, controller.Player.Position); 
+            var dist = Util.ManhattanDistance(kvp.Key, controller.Player.Position);
             if (dist < minDist) {
                 minDist = dist;
                 minPath = kvp.Value;
@@ -26,8 +26,7 @@ public class Enemy : Unit {
     public override IEnumerator PlayAttackPhase(GameController controller) {
         if (Util.ManhattanDistance(Position, controller.Player.Position) <= 1)
             controller.Player.Damage(10, Element.Physical, this, "Coup de poing");
-        
+
         yield break;
     }
-
 }

@@ -12,10 +12,10 @@ public class AttackPhase : GamePhase {
                 continue;
 
             unit.StartOfTurn();
-            
+
             if (unit.Stats.health <= 0)
                 continue;
-            
+
             yield return unit.StartCoroutine(unit.PlayAttackPhase(controller));
 
             unit.EndOfTurn();

@@ -1,7 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 public class MovementPhase : GamePhase {
     public MovementPhase(GameController controller) : base(controller) { }
