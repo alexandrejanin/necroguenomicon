@@ -13,7 +13,7 @@ public class UnitHealthBar : MonoBehaviour {
             return;
         }
 
-        transform.position = Camera.main.WorldToScreenPoint(unit.transform.position + new Vector3(0, -0.25f));
+        transform.position = Camera.main.WorldToScreenPoint(unit.transform.position + new Vector3(0, 0.5f));
         image.fillAmount = unit.Health / (float) unit.MaxHealth;
         text.text = $"{unit.Health}/{unit.MaxHealth}";
     }

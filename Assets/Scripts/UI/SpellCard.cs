@@ -23,7 +23,7 @@ public class SpellCard : MonoBehaviour {
     }
 
     private void UpdateAppearance() {
-        titleText.text = spell.Name;
+        titleText.text = spell.OwnName;
         rangeText.text = spell.Range.ToString();
         background.color = spell.Color;
         sprite.sprite = spell.Sprite;

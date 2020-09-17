@@ -4,9 +4,8 @@ using System.Linq;
 using UnityEngine;
 
 public class Player : Unit {
-    private List<Spell> spells = new List<Spell>();
-    public List<Spell> Spells => spells;
-    
+    public List<Spell> spells = new List<Spell>();
+
     public override IEnumerator PlayMovementPhase(GameController controller) {
         var movementTiles = GetMovementTiles();
 
@@ -24,8 +23,11 @@ public class Player : Unit {
     }
 
     public override IEnumerator PlayAttackPhase(GameController controller) {
+        if (spells == null)
+            yield break;
+
         foreach (var spell in spells) {
-            controller.PhaseText.text = spell.Name;
+            controller.PhaseText.text = spell.FullName;
             var validTargets = spell.GetValidTargets(this);
             controller.TileDrawer.DrawTiles(validTargets);
 
@@ -40,5 +42,4 @@ public class Player : Unit {
             spell.Apply(this, targetedTile);
         }
     }
-
 }

@@ -1,14 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 public class BookUI : MonoBehaviour {
-    [SerializeField]
-    private Spell[] spellFragments;
+    [SerializeField] private Spell[] spellFragments;
 
-    [SerializeField]
-    private SpellSlot[] spellFragmentSlots, spellSlots;
+    [SerializeField] private SpellSlot[] spellFragmentSlots, spellSlots;
 
-    [SerializeField]
-    private SpellSlot primarySpellSlot, secondarySpellSlot, resultSpellSlot;
+    [SerializeField] private SpellSlot primarySpellSlot, secondarySpellSlot, resultSpellSlot;
 
     public void StartTurn() {
         foreach (var slot in spellFragmentSlots)
@@ -16,7 +14,8 @@ public class BookUI : MonoBehaviour {
     }
 
     public void Validate() {
-
+        FindObjectOfType<GameController>().Player.spells =
+            spellSlots.Where(slot => slot.Spell != null).Select(slot => slot.Spell).ToList();
     }
 
     public void Toggle() {
@@ -32,14 +31,18 @@ public class BookUI : MonoBehaviour {
             spellSlot.Spell = null;
         }
 
-        resultSpellSlot.Spell = primarySpellSlot.Spell?.WithSecondary(secondarySpellSlot.Spell);
+        CombineSpells();
     }
+
+    private void CombineSpells() =>
+        resultSpellSlot.Spell = primarySpellSlot.Spell?.WithSecondary(secondarySpellSlot.Spell);
 
     public void OnCombinationSlotClicked(SpellSlot spellSlot) {
         foreach (var fragmentSlot in spellFragmentSlots) {
             if (fragmentSlot.Spell == null) {
                 fragmentSlot.Spell = spellSlot.Spell;
                 spellSlot.Spell = null;
+                CombineSpells();
             }
         }
     }
@@ -55,6 +58,5 @@ public class BookUI : MonoBehaviour {
         }
     }
 
-    public void OnSpellSlotClicked(SpellSlot spellSlot) {
-    }
+    public void OnSpellSlotClicked(SpellSlot spellSlot) { }
 }

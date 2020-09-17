@@ -5,13 +5,13 @@ public class PreparationPhase : GamePhase {
     private BookUI book;
 
     public PreparationPhase(GameController controller) : base(controller) {
-        book = GameController.FindObjectOfType<BookUI>();
-     }
+        book = Object.FindObjectOfType<BookUI>(true);
+    }
 
     public override IEnumerator Run() {
         controller.PhaseText.text = "Phase de préparation";
 
-        controller.Player.Spells.Clear();
+        controller.Player.spells.Clear();
 
         book.gameObject.SetActive(true);
         book.StartTurn();

@@ -8,24 +8,20 @@ public abstract class Spell : ScriptableObject {
     private Spell secondary;
     public Spell Secondary => secondary;
 
-    [SerializeField]
-    private string ownName;
-    public string Name => secondary == null ? ownName : $"{ownName} + {secondary.ownName}"; 
-    
-    [SerializeField]
-    private Element element;
+    [SerializeField] private string ownName;
+    public string OwnName => ownName;
+    public string FullName => secondary == null ? ownName : $"{ownName} + {secondary.ownName}";
+
+    [SerializeField] private Element element;
     public Element Element => element;
 
-    [SerializeField]
-    private Color color;
+    [SerializeField] private Color color;
     public Color Color => color;
 
-    [SerializeField, Min(0)]
-    private int range;
+    [SerializeField, Min(0)] private int range;
     public int Range => range;
 
-    [SerializeField]
-    private Sprite sprite;
+    [SerializeField] private Sprite sprite;
     public Sprite Sprite => sprite;
 
     public abstract HashSet<Vector2Int> GetValidTargets(Unit caster);

@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour {
     [SerializeField] private Enemy enemyPrefab;
 
     [SerializeField] private UnitHealthBar healthBarPrefab;
+    [SerializeField] private RectTransform healthBarParent;
 
     private Environment environment = new Environment();
     public Environment Environment => environment;
@@ -55,8 +56,7 @@ public class GameController : MonoBehaviour {
         var unit = Instantiate(prefab);
         unit.Spawn(position);
         environment.AddUnit(unit);
-        var canvas = FindObjectOfType<Canvas>();
-        var healthBar = Instantiate(healthBarPrefab, canvas.transform);
+        var healthBar = Instantiate(healthBarPrefab, healthBarParent);
         healthBar.unit = unit;
         return unit;
     }
