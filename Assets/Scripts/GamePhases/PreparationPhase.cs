@@ -13,10 +13,13 @@ public class PreparationPhase : GamePhase {
 
         controller.Player.spells.Clear();
 
+        yield return new WaitForSeconds(1f);
+
         book.gameObject.SetActive(true);
         book.StartTurn();
 
-        yield return new WaitForSeconds(2f);
+        while (!book.Finished)
+            yield return null;
 
         controller.Phase = new MovementPhase(controller);
     }

@@ -8,14 +8,27 @@ public class BookUI : MonoBehaviour {
 
     [SerializeField] private SpellSlot primarySpellSlot, secondarySpellSlot, resultSpellSlot;
 
+    public bool Finished { get; private set; }
+
     public void StartTurn() {
+        Finished = false;
+
         foreach (var slot in spellFragmentSlots)
             slot.Spell = spellFragments[Random.Range(0, spellFragments.Length)];
+
+        foreach (var slot in spellSlots)
+            slot.Spell = null;
+
+        primarySpellSlot.Spell = null;
+        secondarySpellSlot.Spell = null;
+        resultSpellSlot.Spell = null;
     }
 
     public void Validate() {
         FindObjectOfType<GameController>().Player.spells =
             spellSlots.Where(slot => slot.Spell != null).Select(slot => slot.Spell).ToList();
+        gameObject.SetActive(false);
+        Finished = true;
     }
 
     public void Toggle() {
