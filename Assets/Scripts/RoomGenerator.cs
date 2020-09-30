@@ -11,11 +11,7 @@ public class RoomGenerator : MonoBehaviour {
 
     [SerializeField] private List<Building> buildingPrefabs;
 
-    private GameController gameController;
-
-    private void Awake() {
-        gameController = GetComponent<GameController>();
-
+    public void GenerateRoom(GameController gameController) {
         var width = Random.Range(minSize.x, maxSize.x);
         var height = Random.Range(minSize.y, maxSize.y);
 
@@ -26,14 +22,16 @@ public class RoomGenerator : MonoBehaviour {
                 tilemap.SetTile(new Vector3Int(x, y, 0), ground);
 
         for (int i = 0; i < 10; i++) {
-            var building = buildingPrefabs[Random.Range(0, buildingPrefabs.Count)];
+            var buildingPrefab = buildingPrefabs[Random.Range(0, buildingPrefabs.Count)];
 
             var pos = new Vector2Int(
-                Random.Range(0, width - building.Width),
-                Random.Range(0, height - building.Height)
+                Random.Range(0, width - buildingPrefab.Width),
+                Random.Range(0, height - buildingPrefab.Height)
             );
-            if (gameController.Environment.PlaceBuilding(building, pos))
-                Instantiate(building, new Vector3(pos.x, pos.y), Quaternion.identity);
+            if (gameController.Environment.PlaceBuilding(buildingPrefab, pos)) {
+                var building = Instantiate(buildingPrefab, new Vector3(pos.x, pos.y), Quaternion.identity);
+                building.SpawnEnemies(gameController);
+            }
 
         }
     }

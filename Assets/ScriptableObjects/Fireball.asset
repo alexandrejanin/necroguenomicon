@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 162937b83b87ad645a38e1d0dcbab717, type: 3}
   m_Name: Fireball
   m_EditorClassIdentifier: 
-  ownName: Boule de feu
   element: 1
   color: {r: 0.8018868, g: 0.1021271, b: 0.1021271, a: 1}
   range: 5
@@ -26,3 +25,5 @@ MonoBehaviour:
   secondaryDuration:
     baseAmount: 2
     bonusAmount: 0
+  projectilePrefab: {fileID: 6647572269485429860, guid: 684363fff3974144ca0f6403e5d7fc2e, type: 3}
+  projectileSpeed: 5

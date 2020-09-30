@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -10,25 +11,21 @@ public class LightningArc : Spell {
         return caster.environment.ManhattanRange(caster.Position, Range);
     }
 
-    public override HashSet<Unit> PrimaryEffect(Unit caster, Vector2Int position, bool isPrimarySpell) {
+    public override IEnumerator PrimaryEffect(Unit caster, Vector2Int position, bool isPrimarySpell, HashSet<Unit> targets) {
         var target = caster.environment.GetUnit(position);
         if (target == null)
-            return null;
+            yield break;
 
-        var targets = GetLightningTargets(target, 2, 3, null);
+        targets.UnionWith(GetLightningTargets(target, 2, 3, null));
 
         foreach (var lightningTarget in targets)
             Damage(lightningTarget, primaryDamage.GetAmount(isPrimarySpell), caster);
-
-        return targets;
     }
 
-    public override HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell) {
+    public override IEnumerator SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell, HashSet<Unit> secondaryTargets) {
         if (targets == null)
-            return null;
+            yield break;
         
-        var secondaryTargets = new HashSet<Unit>();
-
         foreach (var primaryTarget in targets) {
             var lightningTargets = GetLightningTargets(primaryTarget, 2, 3,
                 new HashSet<Unit>(targets.Union(secondaryTargets)));
@@ -37,8 +34,6 @@ public class LightningArc : Spell {
 
         foreach (var secondaryTarget in secondaryTargets)
             Damage(secondaryTarget, secondaryDamage.GetAmount(isSecondarySpell), caster);
-
-        return secondaryTargets;
     }
 
     private HashSet<Unit> GetLightningTargets(

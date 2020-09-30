@@ -39,7 +39,7 @@ public abstract class Unit : SerializedMonoBehaviour {
     }
 
     public void FixedUpdate() {
-        transform.position = Vector3.Lerp(transform.position, WorldPosition, 0.2f);
+        transform.position = Vector3.Lerp(transform.position, WorldPosition, 0.3f);
     }
 
     public void StartOfTurn() {

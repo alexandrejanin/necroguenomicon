@@ -11,6 +11,11 @@ public class Building : MonoBehaviour {
     public int Width => size.x;
     public int Height => size.y;
 
+    public void SpawnEnemies(GameController gameController) {
+        foreach (var spawnPoint in GetComponentsInChildren<SpawnPoint>())
+            spawnPoint.SpawnEnemy(gameController);
+    }
+
     public bool IsWalkable(int x, int y) {
         foreach (var tilemapCollider in tilemapColliders)
             if (tilemapCollider.GetColliderType((Vector3Int) offset + new Vector3Int(x, y, 0)) == Tile.ColliderType.Grid)

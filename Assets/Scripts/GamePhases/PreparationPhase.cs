@@ -13,7 +13,7 @@ public class PreparationPhase : GamePhase {
 
         controller.Player.spells.Clear();
 
-        yield return new WaitForSeconds(1f);
+        yield return Object.FindObjectOfType<PanCamera>().MoveTo(controller.Player.Position);
 
         book.gameObject.SetActive(true);
         book.StartTurn();

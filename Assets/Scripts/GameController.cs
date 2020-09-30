@@ -44,15 +44,13 @@ public class GameController : MonoBehaviour {
 
         player = SpawnUnit(playerPrefab, new Vector2Int(0, 0));
         player.name = "Joueur";
-        for (var i = 0; i < enemyCount; i++) {
-            var unit = SpawnUnit(enemyPrefab, new Vector2Int(Random.Range(-5, 5), Random.Range(-5, 5)));
-            unit.name = $"Ivrogne Cogneur {i}";
-        }
+
+        GetComponent<RoomGenerator>().GenerateRoom(this);
 
         Phase = new PreparationPhase(this);
     }
 
-    private T SpawnUnit<T>(T prefab, Vector2Int position) where T : Unit {
+    public T SpawnUnit<T>(T prefab, Vector2Int position) where T : Unit {
         var unit = Instantiate(prefab);
         unit.Spawn(position);
         environment.AddUnit(unit);
@@ -68,5 +66,13 @@ public class GameController : MonoBehaviour {
             Mathf.FloorToInt(mousePositionInWorld.x),
             Mathf.FloorToInt(mousePositionInWorld.y)
         );
+    }
+
+    private void OnDrawGizmosSelected() {
+        Gizmos.color = new Color(0, 1, 0, 0.5f);
+        for (int x = 0; x < environment.Width; x++)
+            for (int y = 0; y < environment.Height; y++)
+                if (environment.IsWalkable(x, y))
+                    Gizmos.DrawCube(new Vector3(x + 0.5f, y + 0.5f, 0), Vector3.one);
     }
 }

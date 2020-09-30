@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Ice Shard", menuName = "Spell/Ice Shard")]
@@ -9,19 +10,19 @@ public class IceShard : Spell {
         return caster.environment.ManhattanRange(caster.Position, Range);
     }
 
-    public override HashSet<Unit> PrimaryEffect(Unit caster, Vector2Int position, bool isPrimarySpell) {
+    public override IEnumerator PrimaryEffect(Unit caster, Vector2Int position, bool isPrimarySpell, HashSet<Unit> targets) {
         var target = caster.environment.GetUnit(position);
         if (target == null)
-            return null;
+            yield break;
+
+        targets?.Add(target);
 
         Damage(target, primaryDamage.GetAmount(isPrimarySpell), caster);
-
-        return new HashSet<Unit> {target};
     }
 
-    public override HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell) {
+    public override IEnumerator SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell, HashSet<Unit> secondaryTargets) {
         if (targets == null)
-            return null;
+            yield break;
         
         foreach (var target in targets)
             target.AddStatsEffect(new StatsEffect(
@@ -29,7 +30,5 @@ public class IceShard : Spell {
                 2,
                 stats => stats.movementPoints -= secondaryMpReduction.GetAmount(isSecondarySpell)
             ));
-
-        return targets;
     }
 }

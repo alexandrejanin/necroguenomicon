@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,21 +25,23 @@ public abstract class Spell : ScriptableObject {
     public abstract HashSet<Vector2Int> GetValidTargets(Unit caster);
     public virtual HashSet<Vector2Int> GetTargetedTiles(Unit caster, Vector2Int position) => new HashSet<Vector2Int> {position};
 
-    public abstract HashSet<Unit> PrimaryEffect(Unit caster, Vector2Int position, bool isPrimarySpell);
-    public abstract HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell);
+    public abstract IEnumerator PrimaryEffect(Unit caster, Vector2Int position, bool isPrimarySpell, HashSet<Unit> targets);
+    public abstract IEnumerator SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell, HashSet<Unit> secondaryTargets);
 
-    public virtual void Apply(Unit caster, Vector2Int position) {
+    public IEnumerator Apply(Unit caster, Vector2Int position) {
         if (secondary == null) {
-            var targets = PrimaryEffect(caster, position, false);
-            SecondaryEffect(caster, targets, false);
-            return;
+            var targets = new HashSet<Unit>();
+            yield return PrimaryEffect(caster, position, false, targets);
+            yield return SecondaryEffect(caster, targets, false, null);
+        } else {
+            var targets = new HashSet<Unit>();
+            yield return PrimaryEffect(caster, position, true, targets);
+            if (targets.Count == 0)
+                yield break;
+            var secondaryTargets = new HashSet<Unit>(targets);
+            yield return secondary.SecondaryEffect(caster, targets, true, secondaryTargets);
+            yield return SecondaryEffect(caster, secondaryTargets, false, null);
         }
-
-        var primaryTargets = PrimaryEffect(caster, position, true);
-        if (primaryTargets == null || primaryTargets.Count == 0)
-            return;
-        var secondaryTargets = secondary.SecondaryEffect(caster, primaryTargets, true);
-        SecondaryEffect(caster, secondaryTargets, false);
     }
 
     protected void Damage(Unit target, int damage, Unit caster, string sourceName = null) {
@@ -49,6 +52,7 @@ public abstract class Spell : ScriptableObject {
         if (spell == null)
             return this;
         var newSpell = Instantiate(this);
+        newSpell.name = name;
         newSpell.secondary = spell;
         return newSpell;
     }

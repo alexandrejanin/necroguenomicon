@@ -7,6 +7,7 @@ public class Player : Unit {
     public List<Spell> spells = new List<Spell>();
 
     public override IEnumerator PlayMovementPhase(GameController controller) {
+        yield return Object.FindObjectOfType<PanCamera>().MoveTo(Position);
         var movementTiles = GetMovementTiles();
 
         controller.TileDrawer.DrawTiles(movementTiles.Keys);
@@ -23,12 +24,14 @@ public class Player : Unit {
 
         controller.TileDrawer.Clear();
 
-        yield return StartCoroutine(Move(movementTiles[targetedTile]));
+        yield return Move(movementTiles[targetedTile]);
     }
 
     public override IEnumerator PlayAttackPhase(GameController controller) {
-        if (spells == null)
+        if (spells == null || spells.Count == 0)
             yield break;
+
+        yield return Object.FindObjectOfType<PanCamera>().MoveTo(Position);
 
         foreach (var spell in spells) {
             controller.PhaseText.text = spell.FullName;
@@ -43,7 +46,7 @@ public class Player : Unit {
 
             controller.TileDrawer.Clear();
 
-            spell.Apply(this, targetedTile);
+            yield return spell.Apply(this, targetedTile);
         }
     }
 }
