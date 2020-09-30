@@ -1455,14 +1455,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cccace261ebe02d4088ead8f41603e08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSize: {x: 30, y: 20}
-  maxSize: {x: 40, y: 30}
+  minSize: {x: 60, y: 60}
+  maxSize: {x: 100, y: 100}
   tilemap: {fileID: 569621333}
   ground: {fileID: 11400000, guid: eca04ec5d79b406438295e03cae3dc81, type: 2}
   buildingPrefabs:
   - {fileID: 4376940828276180707, guid: 665b3cc1f1daa0348a4ab4cf834bbc9d, type: 3}
   - {fileID: 3710748539826495714, guid: 96f7dcddf82507745ba6d6fb501bf1fa, type: 3}
   - {fileID: 3710748539826495714, guid: 6b10f5490b1a4d54dbaa8b9e1fa6d27e, type: 3}
+  - {fileID: 3710748539826495714, guid: e4320b414998dd142b0183abca13af84, type: 3}
+  - {fileID: 3710748539826495714, guid: 347c3faea328dc443a8ade3f22da2aec, type: 3}
 --- !u!1 &953399563
 GameObject:
   m_ObjectHideFlags: 0
