@@ -2,9 +2,9 @@
 
 public class PanCamera : MonoBehaviour {
     [SerializeField, Min(0)] private float speed = 5f;
+    [SerializeField, Min(0)] private float minSize, maxSize, sizeSensitivity;
 
-    private Vector3 startingPosition;
-    private Vector3 offset;
+    private Vector3 lastMousePosition;
 
     private new Camera camera;
 
@@ -21,15 +21,18 @@ public class PanCamera : MonoBehaviour {
             transform.position += Time.deltaTime * speed * Vector3.down;
 
         if (Input.GetMouseButtonDown(2)) {
-            startingPosition = transform.position;
-            offset = new Vector3();
+            lastMousePosition = Input.mousePosition;
         }
 
         if (Input.GetMouseButton(2)) {
-            var mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
-            mousePos.z = 0;
-            offset -= mousePos;
-            transform.position = startingPosition + offset;
+            transform.position += camera.ScreenToWorldPoint(lastMousePosition) -
+                                  camera.ScreenToWorldPoint(Input.mousePosition);
+            lastMousePosition = Input.mousePosition;
         }
+
+        var scroll = Input.GetAxis("Mouse ScrollWheel");
+
+        if (scroll != 0)
+            camera.orthographicSize = Mathf.Clamp(camera.orthographicSize - scroll * sizeSensitivity, minSize, maxSize);
     }
 }

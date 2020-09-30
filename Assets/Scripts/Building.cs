@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 
 public class Building : MonoBehaviour {
-    [SerializeField]
-    private Vector2Int size, offset;
+    [SerializeField] private Vector2Int size, offset;
 
     public Vector2Int Size => size;
     public Vector2Int Offset => offset;

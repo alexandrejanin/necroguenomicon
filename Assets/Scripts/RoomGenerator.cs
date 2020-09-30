@@ -3,17 +3,13 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class RoomGenerator : MonoBehaviour {
-    [SerializeField]
-    private Vector2Int minSize, maxSize;
+    [SerializeField] private Vector2Int minSize, maxSize;
 
-    [SerializeField]
-    private Tilemap tilemap;
-    
-    [SerializeField]
-    private Tile ground;
+    [SerializeField] private Tilemap tilemap;
 
-    [SerializeField]
-    private List<Building> buildingPrefabs;
+    [SerializeField] private Tile ground;
+
+    [SerializeField] private List<Building> buildingPrefabs;
 
     private bool[,] tiles;
 
@@ -29,29 +25,29 @@ public class RoomGenerator : MonoBehaviour {
         tiles = new bool[width, height];
 
         for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-                tilemap.SetTile(new Vector3Int(x, y, 0), ground);
+        for (int y = 0; y < height; y++)
+            tilemap.SetTile(new Vector3Int(x, y, 0), ground);
 
         for (int i = 0; i < 10; i++) {
             var building = buildingPrefabs[Random.Range(0, buildingPrefabs.Count)];
 
-            var pos = new Vector2Int(Random.Range(0, width - building.Width), Random.Range(0, height - building.Height));
+            var pos = new Vector2Int(Random.Range(0, width - building.Width),
+                Random.Range(0, height - building.Height));
             if (CanPlaceBuilding(building, pos)) {
                 Instantiate(building, new Vector3(pos.x, pos.y), Quaternion.identity);
                 for (int x = 0; x < building.Width; x++)
-                    for (int y = 0; y < building.Height; y++)
-                        tiles[pos.x + x, pos.y + y] = true;
+                for (int y = 0; y < building.Height; y++)
+                    tiles[pos.x + x, pos.y + y] = true;
                 continue;
             }
-
         }
     }
 
     private bool CanPlaceBuilding(Building building, Vector2Int position) {
         for (int x = 0; x < building.Width; x++)
-            for (int y = 0; y < building.Height; y++)
-                if (!IsTileFree(position.x + x, position.y + y))
-                    return false;
+        for (int y = 0; y < building.Height; y++)
+            if (!IsTileFree(position.x + x, position.y + y))
+                return false;
 
         return true;
     }
@@ -63,7 +59,7 @@ public class RoomGenerator : MonoBehaviour {
         if (minSize.y % 2 != 0)
             minCenter.y += 0.5f;
         Gizmos.DrawWireCube(minCenter, new Vector3(minSize.x, minSize.y));
-        
+
         var maxCenter = new Vector3(maxSize.x / 2, maxSize.y / 2);
         if (maxSize.x % 2 != 0)
             maxCenter.x += 0.5f;
