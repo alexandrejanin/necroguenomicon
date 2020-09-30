@@ -23,12 +23,15 @@ public class LightningArc : Spell {
         return targets;
     }
 
-    public override HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> primaryTargets, bool isSecondarySpell) {
+    public override HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell) {
+        if (targets == null)
+            return null;
+        
         var secondaryTargets = new HashSet<Unit>();
 
-        foreach (var primaryTarget in primaryTargets) {
+        foreach (var primaryTarget in targets) {
             var lightningTargets = GetLightningTargets(primaryTarget, 2, 3,
-                new HashSet<Unit>(primaryTargets.Union(secondaryTargets)));
+                new HashSet<Unit>(targets.Union(secondaryTargets)));
             secondaryTargets.UnionWith(lightningTargets);
         }
 

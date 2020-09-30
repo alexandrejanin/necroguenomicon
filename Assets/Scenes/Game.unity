@@ -1461,6 +1461,8 @@ MonoBehaviour:
   ground: {fileID: 11400000, guid: eca04ec5d79b406438295e03cae3dc81, type: 2}
   buildingPrefabs:
   - {fileID: 4376940828276180707, guid: 665b3cc1f1daa0348a4ab4cf834bbc9d, type: 3}
+  - {fileID: 3710748539826495714, guid: 96f7dcddf82507745ba6d6fb501bf1fa, type: 3}
+  - {fileID: 3710748539826495714, guid: 6b10f5490b1a4d54dbaa8b9e1fa6d27e, type: 3}
 --- !u!1 &953399563
 GameObject:
   m_ObjectHideFlags: 0

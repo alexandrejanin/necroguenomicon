@@ -53,10 +53,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: environment
-      Entry: 6
-      Data: 
-    - Name: baseStats
+    - Name: Stats
       Entry: 7
       Data: 0|UnitStats, Assembly-CSharp
     - Name: maxHealth
@@ -67,7 +64,31 @@ MonoBehaviour:
       Data: 100
     - Name: movementPoints
       Entry: 3
-      Data: 3
+      Data: 4
+    - Name: resistances
+      Entry: 6
+      Data: 
+    - Name: affinities
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: environment
+      Entry: 6
+      Data: 
+    - Name: baseStats
+      Entry: 7
+      Data: 1|UnitStats, Assembly-CSharp
+    - Name: maxHealth
+      Entry: 3
+      Data: 100
+    - Name: health
+      Entry: 3
+      Data: 100
+    - Name: movementPoints
+      Entry: 3
+      Data: 4
     - Name: resistances
       Entry: 6
       Data: 

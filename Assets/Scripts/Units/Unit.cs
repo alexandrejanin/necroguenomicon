@@ -64,46 +64,26 @@ public abstract class Unit : SerializedMonoBehaviour {
 
     public Dictionary<Vector2Int, List<Vector2Int>> GetMovementTiles() {
         var tiles = new Dictionary<Vector2Int, List<Vector2Int>>();
+
         for (var y = position.y - Stats.movementPoints; y <= position.y + Stats.movementPoints; y++) {
             for (var x = position.x - Stats.movementPoints; x <= position.x + Stats.movementPoints; x++) {
                 var tile = new Vector2Int(x, y);
+
+                if (!environment.IsWalkable(tile))
+                    continue;
 
                 var unit = environment.GetUnit(tile);
 
                 if (unit != null && unit != this)
                     continue;
 
-                var path = GetPath(tile);
-                if (path.Count <= Stats.movementPoints)
+                var path = environment.GetPath(position, tile);
+                if (path != null && path.Count <= Stats.movementPoints)
                     tiles.Add(tile, path);
             }
         }
 
         return tiles;
-    }
-
-    public List<Vector2Int> GetPath(Vector2Int goal) {
-        if (goal == Position)
-            return new List<Vector2Int>();
-
-        var path = new List<Vector2Int>();
-
-        var tile = Position;
-
-        do {
-            if (tile.x < goal.x)
-                tile.x++;
-            else if (tile.x > goal.x)
-                tile.x--;
-            else if (tile.y < goal.y)
-                tile.y++;
-            else if (tile.y > goal.y)
-                tile.y--;
-
-            path.Add(tile);
-        } while (tile != goal);
-
-        return path;
     }
 
     public void Damage(int damage, Element element, Unit source, string spellName) {

@@ -20,6 +20,9 @@ public class Fireball : Spell {
     }
 
     public override HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell) {
+        if (targets == null)
+            return null;
+        
         foreach (var target in targets)
             target.AddTickerEffect(new TickerEffect(
                 "En feu !",

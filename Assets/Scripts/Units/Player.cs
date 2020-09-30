@@ -14,6 +14,10 @@ public class Player : Unit {
         Vector2Int targetedTile;
         do {
             targetedTile = controller.GetTargetedTile();
+            if (movementTiles.ContainsKey(targetedTile))
+                controller.TileDrawer.DrawTiles(movementTiles[targetedTile]);
+            else
+                controller.TileDrawer.DrawTiles(movementTiles.Keys);
             yield return null;
         } while (!Input.GetMouseButtonDown(0) || !movementTiles.Keys.Contains(targetedTile));
 

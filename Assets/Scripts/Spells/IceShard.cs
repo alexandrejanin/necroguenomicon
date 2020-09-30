@@ -19,14 +19,17 @@ public class IceShard : Spell {
         return new HashSet<Unit> {target};
     }
 
-    public override HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> primaryTargets, bool isSecondarySpell) {
-        foreach (var target in primaryTargets)
+    public override HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell) {
+        if (targets == null)
+            return null;
+        
+        foreach (var target in targets)
             target.AddStatsEffect(new StatsEffect(
                 "Gelé",
                 2,
                 stats => stats.movementPoints -= secondaryMpReduction.GetAmount(isSecondarySpell)
             ));
 
-        return primaryTargets;
+        return targets;
     }
 }

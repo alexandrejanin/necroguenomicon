@@ -22,9 +22,10 @@ public abstract class Spell : ScriptableObject {
     public Sprite Sprite => sprite;
 
     public abstract HashSet<Vector2Int> GetValidTargets(Unit caster);
+    public virtual HashSet<Vector2Int> GetTargetedTiles(Unit caster, Vector2Int position) => new HashSet<Vector2Int> {position};
 
     public abstract HashSet<Unit> PrimaryEffect(Unit caster, Vector2Int position, bool isPrimarySpell);
-    public abstract HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> primaryTargets, bool isSecondarySpell);
+    public abstract HashSet<Unit> SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell);
 
     public virtual void Apply(Unit caster, Vector2Int position) {
         if (secondary == null) {
