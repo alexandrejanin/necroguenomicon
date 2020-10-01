@@ -26,4 +26,5 @@ MonoBehaviour:
     baseAmount: 2
     bonusAmount: 0
   projectilePrefab: {fileID: 6647572269485429860, guid: 684363fff3974144ca0f6403e5d7fc2e, type: 3}
+  passivePrefab: {fileID: 2101535925407001869, guid: 4a2106776b27ecd49b746248d14861c2, type: 3}
   projectileSpeed: 5

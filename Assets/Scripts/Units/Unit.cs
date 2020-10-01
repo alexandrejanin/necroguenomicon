@@ -10,7 +10,7 @@ public abstract class Unit : SerializedMonoBehaviour {
     private Vector2Int position;
     public Vector2Int Position => position;
 
-    public Vector3 WorldPosition => new Vector3(Position.x + 0.5f, Position.y + 0.5f);
+    public Vector3 WorldPosition => new Vector3(Position.x + 0.5f, Position.y + 0.2f);
 
     [OdinSerialize] protected UnitStats baseStats;
 
@@ -107,9 +107,11 @@ public abstract class Unit : SerializedMonoBehaviour {
         if (from == Position)
             return null;
 
+        // TODO: collide with walls
+
         var dir = Position - from;
         var dest = distance * new Vector2(dir.x, dir.y).normalized;
-        var targetPosition = new Vector2Int(Mathf.RoundToInt(dest.x), Mathf.RoundToInt(dest.y));
+        var targetPosition = Position + new Vector2Int(Mathf.RoundToInt(dest.x), Mathf.RoundToInt(dest.y));
         var unit = environment.GetUnit(targetPosition);
 
         if (unit == null) {

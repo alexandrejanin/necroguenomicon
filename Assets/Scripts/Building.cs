@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class Building : MonoBehaviour {
@@ -17,11 +18,10 @@ public class Building : MonoBehaviour {
     }
 
     public bool IsWalkable(int x, int y) {
-        foreach (var tilemapCollider in tilemapColliders)
-            if (tilemapCollider.GetColliderType((Vector3Int) offset + new Vector3Int(x, y, 0)) == Tile.ColliderType.Grid)
-                return false;
-
-        return true;
+        return tilemapColliders.All(
+            tilemapCollider => tilemapCollider.GetColliderType(new Vector3Int(offset.x + x, offset.y + y, 0))
+                               != Tile.ColliderType.Grid
+        );
     }
 
     private void OnDrawGizmosSelected() {
@@ -38,6 +38,7 @@ public class Building : MonoBehaviour {
         for (var x = 0; x < Width; x++)
             for (var y = 0; y < Height; y++)
                 if (IsWalkable(x, y))
-                    Gizmos.DrawCube((Vector3Int) offset + transform.position + new Vector3(x + 0.5f, y + 0.5f), Vector3.one);
+                    Gizmos.DrawCube((Vector3Int) offset + transform.position + new Vector3(x + 0.5f, y + 0.5f),
+                        Vector3.one);
     }
 }

@@ -17,11 +17,11 @@ public class RoomGenerator : MonoBehaviour {
 
         gameController.Environment.SetSize(width, height);
 
-        for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
+        for (var x = 0; x < width; x++)
+            for (var y = 0; y < height; y++)
                 tilemap.SetTile(new Vector3Int(x, y, 0), ground);
 
-        for (int i = 0; i < 10; i++) {
+        for (var i = 0; i < 100; i++) {
             var buildingPrefab = buildingPrefabs[Random.Range(0, buildingPrefabs.Count)];
 
             var pos = new Vector2Int(
@@ -32,7 +32,6 @@ public class RoomGenerator : MonoBehaviour {
                 var building = Instantiate(buildingPrefab, new Vector3(pos.x, pos.y), Quaternion.identity);
                 building.SpawnEnemies(gameController);
             }
-
         }
     }
 

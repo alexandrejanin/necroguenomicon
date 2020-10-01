@@ -42,10 +42,9 @@ public class GameController : MonoBehaviour {
     private void Awake() {
         tileDrawer = GetComponent<TileDrawer>();
 
-        player = SpawnUnit(playerPrefab, new Vector2Int(0, 0));
-        player.name = "Joueur";
-
         GetComponent<RoomGenerator>().GenerateRoom(this);
+
+        player = SpawnUnit(playerPrefab, new Vector2Int(environment.Width / 2, environment.Height / 2));
 
         Phase = new PreparationPhase(this);
     }
@@ -69,9 +68,12 @@ public class GameController : MonoBehaviour {
     }
 
     private void OnDrawGizmosSelected() {
+        if (environment == null)
+            return;
+
         Gizmos.color = new Color(0, 1, 0, 0.5f);
-        for (int x = 0; x < environment.Width; x++)
-            for (int y = 0; y < environment.Height; y++)
+        for (var x = 0; x < environment.Width; x++)
+            for (var y = 0; y < environment.Height; y++)
                 if (environment.IsWalkable(x, y))
                     Gizmos.DrawCube(new Vector3(x + 0.5f, y + 0.5f, 0), Vector3.one);
     }

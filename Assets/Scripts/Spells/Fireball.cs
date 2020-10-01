@@ -5,14 +5,17 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Fireball", menuName = "Spell/Fireball")]
 public class Fireball : Spell {
     [SerializeField] private SpellStat primaryDamage, secondaryDamage, secondaryDuration;
-    [SerializeField] private GameObject projectilePrefab, passivePrefab;
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private Animator passivePrefab;
     [SerializeField, Min(0)] private float projectileSpeed = 5f;
 
     public override HashSet<Vector2Int> GetValidTargets(Unit caster) {
-        return caster.environment.ManhattanRange(caster.Position, Range);
+        return Environment.ManhattanRange(caster.Position, Range);
     }
 
-    public override IEnumerator PrimaryEffect(Unit caster, Vector2Int position, bool isPrimarySpell, HashSet<Unit> targets) {
+    public override IEnumerator PrimaryEffect(
+        Unit caster, Vector2Int position, bool isPrimarySpell, HashSet<Unit> targets
+    ) {
         var projectile = Instantiate(projectilePrefab, caster.WorldPosition, Quaternion.identity);
 
         var worldTarget = new Vector3(position.x + 0.5f, position.y + 0.5f);
@@ -28,7 +31,7 @@ public class Fireball : Spell {
             yield return new WaitForEndOfFrame();
         }
 
-        Object.Destroy(projectile);
+        Destroy(projectile);
 
         var target = caster.environment.GetUnit(position);
         if (target == null)
@@ -38,17 +41,19 @@ public class Fireball : Spell {
         targets?.Add(target);
     }
 
-    public override IEnumerator SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell, HashSet<Unit> secondaryTargets) {
-        if (targets == null)
-            yield break;
-        
+    public override IEnumerator SecondaryEffect(
+        Unit caster, HashSet<Unit> targets, bool isSecondarySpell, HashSet<Unit> secondaryTargets
+    ) {
         foreach (var target in targets) {
-            yield return new WaitForEndOfFrame();
+            var animator = Instantiate(passivePrefab, target.WorldPosition, passivePrefab.transform.rotation);
+            yield return new WaitForSeconds(1f);
+
+            Destroy(animator.gameObject);
 
             target.AddTickerEffect(new TickerEffect(
                 "En feu !",
                 secondaryDuration.GetAmount(isSecondarySpell),
-                onTick: unit => Damage(unit, secondaryDamage.GetAmount(isSecondarySpell), caster, "En feu !")
+                unit => Damage(unit, secondaryDamage.GetAmount(isSecondarySpell), caster, "En feu !")
             ));
         }
     }

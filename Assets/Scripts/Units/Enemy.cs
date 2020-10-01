@@ -13,7 +13,7 @@ public class Enemy : Unit {
         if (path.Count == 0)
             yield break;
 
-        yield return Object.FindObjectOfType<PanCamera>().MoveTo(Position);
+        yield return FindObjectOfType<PanCamera>().MoveTo(Position);
 
         yield return Move(path);
     }

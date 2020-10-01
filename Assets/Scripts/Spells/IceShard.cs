@@ -7,10 +7,12 @@ public class IceShard : Spell {
     [SerializeField] private SpellStat primaryDamage, secondaryMpReduction;
 
     public override HashSet<Vector2Int> GetValidTargets(Unit caster) {
-        return caster.environment.ManhattanRange(caster.Position, Range);
+        return Environment.ManhattanRange(caster.Position, Range);
     }
 
-    public override IEnumerator PrimaryEffect(Unit caster, Vector2Int position, bool isPrimarySpell, HashSet<Unit> targets) {
+    public override IEnumerator PrimaryEffect(
+        Unit caster, Vector2Int position, bool isPrimarySpell, HashSet<Unit> targets
+    ) {
         var target = caster.environment.GetUnit(position);
         if (target == null)
             yield break;
@@ -20,10 +22,12 @@ public class IceShard : Spell {
         Damage(target, primaryDamage.GetAmount(isPrimarySpell), caster);
     }
 
-    public override IEnumerator SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell, HashSet<Unit> secondaryTargets) {
+    public override IEnumerator SecondaryEffect(
+        Unit caster, HashSet<Unit> targets, bool isSecondarySpell, HashSet<Unit> secondaryTargets
+    ) {
         if (targets == null)
             yield break;
-        
+
         foreach (var target in targets)
             target.AddStatsEffect(new StatsEffect(
                 "Gelé",

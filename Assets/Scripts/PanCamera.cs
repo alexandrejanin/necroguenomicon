@@ -14,10 +14,10 @@ public class PanCamera : MonoBehaviour {
     private void Update() {
         var mousePosition = Input.mousePosition;
 
-        if (Input.GetMouseButton(1)) 
+        if (Input.GetMouseButton(1))
             transform.position += camera.ScreenToWorldPoint(lastMousePosition) -
                                   camera.ScreenToWorldPoint(mousePosition);
- 
+
         lastMousePosition = mousePosition;
 
         var scroll = Input.GetAxis("Mouse ScrollWheel");
@@ -32,6 +32,5 @@ public class PanCamera : MonoBehaviour {
             transform.position = Vector3.Lerp(transform.position, targetWorldPos, 0.2f);
             yield return null;
         }
-
     }
 }
