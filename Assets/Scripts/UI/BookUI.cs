@@ -35,7 +35,9 @@ public class BookUI : MonoBehaviour {
         gameObject.SetActive(!gameObject.activeSelf);
     }
 
-    public void OnFragmentSlotClicked(SpellSlot spellSlot) {
+    public void AddToCombinationSlot(SpellSlot spellSlot) {
+        if (!spellSlot.Spell)
+            return;
         if (primarySpellSlot.Spell == null) {
             primarySpellSlot.Spell = spellSlot.Spell;
             spellSlot.Spell = null;
@@ -44,34 +46,57 @@ public class BookUI : MonoBehaviour {
             spellSlot.Spell = null;
         }
 
-        CombineSpells();
+        UpdateCombination();
     }
 
-    private void CombineSpells() =>
-        resultSpellSlot.Spell = primarySpellSlot.Spell
+    private void UpdateCombination() =>
+        resultSpellSlot.Spell = primarySpellSlot.Spell && secondarySpellSlot.Spell
             ? primarySpellSlot.Spell.WithSecondary(secondarySpellSlot.Spell)
             : null;
 
-    public void OnCombinationSlotClicked(SpellSlot spellSlot) {
+    public void RemoveFromCombineSlot(SpellSlot spellSlot) {
+        if (!spellSlot.Spell)
+            return;
         foreach (var fragmentSlot in spellFragmentSlots) {
             if (fragmentSlot.Spell == null) {
                 fragmentSlot.Spell = spellSlot.Spell;
                 spellSlot.Spell = null;
-                CombineSpells();
+                UpdateCombination();
+                return;
             }
         }
     }
 
-    public void OnResultSlotClicked(SpellSlot spellSlot) {
+    public void Equip(SpellSlot spellSlot) {
+        if (!spellSlot.Spell)
+            return;
         foreach (var slot in spellSlots) {
             if (slot.Spell == null) {
                 slot.Spell = spellSlot.Spell;
                 spellSlot.Spell = null;
-                primarySpellSlot.Spell = null;
-                secondarySpellSlot.Spell = null;
+                if (spellSlot == resultSpellSlot) {
+                    primarySpellSlot.Spell = null;
+                    secondarySpellSlot.Spell = null;
+                }
+                return;
             }
         }
     }
 
-    public void OnSpellSlotClicked(SpellSlot spellSlot) { }
+    public void Unequip(SpellSlot spellSlot) {
+        if (!spellSlot.Spell)
+            return;
+        foreach (var slot in spellFragmentSlots) {
+            if (slot.Spell == null) {
+                if (spellSlot.Spell.Secondary != null) {
+                    slot.Spell = spellSlot.Spell.Secondary;
+                    spellSlot.Spell.secondary = null;
+                } else {
+                    slot.Spell = spellSlot.Spell;
+                    spellSlot.Spell = null;
+                    return;
+                }
+            }
+        }
+    }
 }

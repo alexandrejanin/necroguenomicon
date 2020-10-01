@@ -2,38 +2,46 @@
 using UnityEngine;
 
 public class TileDrawer : MonoBehaviour {
-    [SerializeField] private GameObject tilePrefab;
+    [SerializeField] private SpriteRenderer tilePrefab;
 
-    private List<GameObject> tileObjects = new List<GameObject>();
+    private Dictionary<Color, List<SpriteRenderer>> tileObjects = new Dictionary<Color, List<SpriteRenderer>>();
 
-    public void Clear() {
-        foreach (var tile in tileObjects)
+    public void Clear(Color color) {
+        if (!tileObjects.ContainsKey(color))
+            return;
+        foreach (var tile in tileObjects[color])
             Destroy(tile);
-        tileObjects.Clear();
+        tileObjects[color].Clear();
     }
 
-    public void DrawTiles(ICollection<Vector2Int> tiles) {
+    public void DrawTiles(Color color, ICollection<Vector2Int> tiles) {
         if (tiles == null || tiles.Count == 0) {
-            Clear();
+            Clear(color);
             return;
         }
 
-        if (tiles.Count == tileObjects.Count) {
+        if (tileObjects.ContainsKey(color) && tiles.Count == tileObjects[color].Count) {
             var i = 0;
             foreach (var tile in tiles) {
-                tileObjects[i].transform.position = GetWorldPosition(tile);
+                tileObjects[color][i].transform.position = GetWorldPosition(tile);
                 i++;
             }
         } else {
-            Clear();
+            Clear(color);
 
-            foreach (var tile in tiles)
-                tileObjects.Add(Instantiate(
+            if (!tileObjects.ContainsKey(color))
+                tileObjects[color] = new List<SpriteRenderer>();
+
+            foreach (var tile in tiles) {
+                var spriteRenderer = Instantiate(
                     tilePrefab,
                     GetWorldPosition(tile),
                     Quaternion.identity,
                     transform
-                ));
+                );
+                spriteRenderer.color = new Color(color.r, color.g, color.b, 0.6f);
+                tileObjects[color].Add(spriteRenderer);
+            }
         }
     }
 

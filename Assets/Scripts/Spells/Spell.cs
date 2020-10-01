@@ -5,7 +5,7 @@ using UnityEngine;
 
 [Serializable]
 public abstract class Spell : ScriptableObject {
-    private Spell secondary;
+    public Spell secondary;
     public Spell Secondary => secondary;
 
     public string FullName => secondary == null ? name : $"{name} + {secondary.name}";
@@ -22,32 +22,23 @@ public abstract class Spell : ScriptableObject {
     [SerializeField] private Sprite sprite;
     public Sprite Sprite => sprite;
 
-    public abstract HashSet<Vector2Int> GetValidTargets(Unit caster);
+    public virtual HashSet<Vector2Int> GetValidTargets(Unit caster) => Environment.ManhattanRange(caster.Position, Range);
 
     public virtual HashSet<Vector2Int> GetTargetedTiles(Unit caster, Vector2Int position) =>
         new HashSet<Vector2Int> {position};
 
-    public abstract IEnumerator PrimaryEffect(
-        Unit caster, Vector2Int position, bool isPrimarySpell, HashSet<Unit> targets
-    );
-
-    public abstract IEnumerator SecondaryEffect(
-        Unit caster, HashSet<Unit> targets, bool isSecondarySpell, HashSet<Unit> secondaryTargets
-    );
+    public abstract IEnumerator PrimaryEffect(Unit caster, Vector2Int position, bool isPrimarySpell, System.Func<HashSet<Unit>, IEnumerator> then);
+    public abstract IEnumerator SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell, System.Func<HashSet<Unit>, IEnumerator> then = null);
 
     public IEnumerator Apply(Unit caster, Vector2Int position) {
         if (secondary == null) {
-            var targets = new HashSet<Unit>();
-            yield return PrimaryEffect(caster, position, false, targets);
-            yield return SecondaryEffect(caster, targets, false, null);
+            yield return PrimaryEffect(caster, position, false, targets => SecondaryEffect(caster, targets, false));
         } else {
-            var targets = new HashSet<Unit>();
-            yield return PrimaryEffect(caster, position, true, targets);
-            if (targets.Count == 0)
-                yield break;
-            var secondaryTargets = new HashSet<Unit>(targets);
-            yield return secondary.SecondaryEffect(caster, targets, true, secondaryTargets);
-            yield return SecondaryEffect(caster, secondaryTargets, false, null);
+            yield return PrimaryEffect(caster, position, true,
+                targets => secondary.SecondaryEffect(caster, targets, true,
+                        secondaryTargets => SecondaryEffect(caster, secondaryTargets, false)
+                )
+            );
         }
     }
 

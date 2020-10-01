@@ -3,7 +3,9 @@ using System.Linq;
 using UnityEngine;
 
 public class Environment {
-    public List<Unit> units = new List<Unit>();
+    public readonly List<Unit> units = new List<Unit>();
+
+    public IEnumerable<Enemy> Enemies => units.Where(u => u is Enemy).Cast<Enemy>();
 
     private bool[,] isWalkable;
     private Building[,] buildingAt;
@@ -111,5 +113,16 @@ public class Environment {
         }
 
         return null;
+    }
+
+    public List<Vector2Int> Line(Vector2Int from, Vector2Int to, bool stopAtWall = true, bool stopAtUnit = true) {
+        var baseLine = Util.Line(from, to);
+        for (int i = 0; i < baseLine.Count; i++)
+            if (stopAtUnit && GetUnit(baseLine[i]) || stopAtWall && !IsWalkable(baseLine[i])) {
+                baseLine.RemoveRange(i, baseLine.Count - i);
+                return baseLine;
+            }
+
+        return baseLine;
     }
 }

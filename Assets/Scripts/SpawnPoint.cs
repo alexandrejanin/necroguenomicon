@@ -24,8 +24,6 @@ public class SpawnPoint : SerializedMonoBehaviour {
         var total = 0f;
 
         foreach (var kvp in enemies) {
-            Debug.Log($"{transform.parent.name}, {kvp.Value}, {kvp.Key}");
-            // Debug.Log($"{transform.parent.name} : {rand - total}, {kvp.Value}, {rand - total < kvp.Value}");
             if (rand - total < kvp.Value) {
                 gameController.SpawnUnit(kvp.Key, Position);
                 break;

@@ -15,6 +15,8 @@ public class PreparationPhase : GamePhase {
 
         yield return Object.FindObjectOfType<PanCamera>().MoveTo(controller.Player.Position);
 
+        yield return new WaitForSeconds(1f);
+
         book.gameObject.SetActive(true);
         book.StartTurn();
 

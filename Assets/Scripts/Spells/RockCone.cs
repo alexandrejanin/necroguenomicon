@@ -6,29 +6,25 @@ using UnityEngine;
 public class RockCone : Spell {
     [SerializeField] private SpellStat primaryDamage, secondaryKnockback, secondaryDamage;
 
-    public override HashSet<Vector2Int> GetValidTargets(Unit caster) {
-        return Environment.ManhattanRange(caster.Position, Range);
-    }
-
-    public override IEnumerator PrimaryEffect(
-        Unit caster, Vector2Int position, bool isPrimarySpell, HashSet<Unit> targets
-    ) {
+    public override IEnumerator PrimaryEffect(Unit caster, Vector2Int position, bool isPrimarySpell, System.Func<HashSet<Unit>, IEnumerator> then) {
+        // TODO make rock cone an AoE
         var target = caster.environment.GetUnit(position);
         if (target == null)
             yield break;
 
-        targets?.Add(target);
-
         Damage(target, primaryDamage.GetAmount(isPrimarySpell), caster);
+        yield return then(new HashSet<Unit>{target});
     }
 
-    public override IEnumerator SecondaryEffect(
-        Unit caster, HashSet<Unit> targets, bool isSecondarySpell, HashSet<Unit> secondaryTargets
-    ) {
+    public override IEnumerator SecondaryEffect(Unit caster, HashSet<Unit> targets, bool isSecondarySpell, System.Func<HashSet<Unit>, IEnumerator> then = null) {
+        var newTargets = new HashSet<Unit>(targets);
         foreach (var target in targets) {
-            target.KnockBack(caster.Position, secondaryKnockback.GetAmount(isSecondarySpell));
-            while (Vector3.Distance(target.transform.position, target.WorldPosition) > 0.01f)
+            newTargets.UnionWith(target.KnockBack(caster.Position, secondaryKnockback.GetAmount(isSecondarySpell)));
+            while (Vector3.Distance(target.transform.position, target.WorldPosition) > 0.1f)
                 yield return null;
         }
+
+        if (then != null)
+            yield return then(targets);
     }
 }
